@@ -1,3 +1,7 @@
+## Prototype for Book Engine Project
+
+This is simply an Alexa Skill, which can fetch book information for kids. Kids can ask for book by title and author or just by title.
+
 ## Inspiration
 
 As a bibliophile, I wanted my Echo to tell me about books I want to read. It's rating, small description, publication year and much more. It's little easier than "googling it", as I can just ask for kids book to Alexa.
