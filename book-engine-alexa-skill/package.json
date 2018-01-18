@@ -1,7 +1,7 @@
 {
-  "name": "kids-classic-books",
+  "name": "bfi-book-engine",
   "version": "1.0.0",
-  "description": "Lambda function for Alexa skill - kids-classic-books",
+  "description": "Lambda function for Alexa skill - bfi-book-engine",
   "main": "index.js",
   "scripts": {
     "test": "npm test",
