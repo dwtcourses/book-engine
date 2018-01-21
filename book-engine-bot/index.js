@@ -1,19 +1,21 @@
+/**
+ * @author Mukul <@mukul1904>
+ */
 'use strict';
 
 const alexaLogger = require('./logger');
 const{ handleReq } = require('./service');
 
-const helpMessage = 'Here\'s what you can ask book-engine-bot:'+
-                    '1. Tell me about Harry Potter by JK Rowlings' +
-                    '2. Tell me about The Jungle book' +
-                    '3. Who is author of The fault in our stars' +
-                    '4. Similiar books like The Lord of the rings' +
-                    '5.ß Give me a short description of The Women on the Train';
-
-// In future, you will also be able to ask: 
-// 1. Tell me most popular most popular contemporary books
-// 2. What are most famous YA books?
-// 3. The books from author XYZ';
+const helpMessage = 'Here\'s what you can ask book-engine-bot: \n'+
+                    '1. Tell me about Harry Potter by JK Rowlings \n' +
+                    '2. Tell me about The Jungle book\n' +
+                    '3. Who is author of The fault in our stars\n' +
+                    '4. Similar books like The Lord of the rings\n' +
+                    '5. Give me a short description of The Women on the Train\n\n' +
+                    'In future, you will also be able to ask: \n' +
+                    '1. Tell me most popular most popular contemporary books\n' +
+                    '2. What are most famous YA books?\n' +
+                    '3. The books from author XYZ';
 
 const elicitSlot = (sessionAttributes, intentName, slots, slotToElicit, message) => {
     return {
