@@ -29,3 +29,5 @@ TBD (Soon to be added, eslint, lambda function, scrappers etc)
 ## Contributors
 
 - [Mukul Jain](https://www.twitter.com/mukul1904)
+- [Hitesh Nankani](https://twitter.com/hiteshn97)
+- [Harshit](https://twitter.com/hmharshitharsh)
