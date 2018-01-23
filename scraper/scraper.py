@@ -4,37 +4,42 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 
-class GoodReads:
-    __popular_all_time_books_url = 'https://www.goodreads.com/shelf/show/{genre}'
-    __popular_books_this_week_url = 'https://www.goodreads.com/genres/most_read/{genre}'
-    __response = response = {
-        "new_releases": [],
+class GoodReadsCrawler:
+    popular_all_time_books_url = 'https://www.goodreads.com/shelf/show/'
+    popular_books_this_week_url = 'https://www.goodreads.com/genres/most_read/'
+    response = {
         "most_read_this_week": [],
         "most_popular": [],
     }
 
-    def scarpWeeklyPopularBooks(self, genre):
-        soup = self.convert(self.__popular_books_this_week_url.format(genre=genre))
+    def __init__(self, genre):
+        self.popular_all_time_books_url = 'https://www.goodreads.com/shelf/show/' + genre
+        self.popular_books_this_week_url = 'https://www.goodreads.com/genres/most_read/' + genre
+
+    def scarpWeeklyPopularBooks(self):
+        print("Scrapping weekly most read books")
+        soup = self.convert(self.popular_books_this_week_url)
         books = soup.find_all('img', {'class': 'bookImage'})
         for book in books:
             goodreads_id = book.get("src")[35:46]
-            self.__response.get("most_read_this_week").append(
+            self.response.get("most_read_this_week").append(
                 {"goodreads_id": goodreads_id,
                  "title": book.get("alt"),
                  "isbn_id": None}
             )
-        return self.__response
+        return self.response
 
-    def scarpMostPopularBooks(self, genre):
-        soup = self.convert(self.__popular_all_time_books_url.format(genre=genre))
+    def scarpMostPopularBooks(self):
+        print("Scrapping most popular books")        
+        soup = self.convert(self.popular_all_time_books_url)
         books = soup.find_all('a', {'class': 'leftAlignedImage'})
         for book in books:
-            self.__response.get("most_read_this_week").append(
+            self.response.get("most_popular").append(
                 {
                     "goodreads_id": book.findChild().get('src')[35:46],
                     "title": book.get("title"),
                     "isbn_id": None})
-        return self.__response
+        return self.response
 
     def convert(self, url):
         req = urllib.request.Request(url)
@@ -45,9 +50,12 @@ class GoodReads:
         soup = BeautifulSoup(resp, 'lxml')
         return soup
 
+def scrap(genre):
+    scraper = GoodReadsCrawler(genre)
+    scraper.scarpMostPopularBooks()
+    scraper.scarpWeeklyPopularBooks()
+    # print(scraper.response["most_read_this_week"])
+    # print(scraper.response["most_popular"])
+    return scraper.response
 
-if __name__ == "__main__":
-    print(GoodReads().scarpMostPopularBooks('business'))
-    print("\n\n\n\n")
-    print(GoodReads().scarpWeeklyPopularBooks('business'))
-
+scrap('business')
