@@ -3,6 +3,12 @@
 
 __author__ = 'myke11j'
 
+import boto3
+import os
+
+print(os.environ['HOME'])
+client = boto3.client('lambda')
+
 genres = [
 "art",
 "Biography",
@@ -46,10 +52,15 @@ genres = [
 
 def invokeLambda(genre):
     print("invoking lambda for genre " + genre)
+    response = client.invoke(
+        FunctionName='string',
+        region
+    )
 
-def init():
+def handler(event, context):
     for genre in genres:
         genre = genre.lower()
         invokeLambda(genre)
-
-init()
+    return {
+        "message": "success"
+    }
