@@ -9,12 +9,12 @@
 
 'use strict';
 
-import goodReadsJSONResponse from 'goodreads-json-api'
-import https from 'https'
+const goodReadsJSONResponse = require('goodreads-json-api')
+const https = require('https')
 
-import messages from './messages'
-import alexaLogger from './logger'
-import utils from './utils'
+const messages = require('./messages')
+const alexaLogger = require('./logger')
+const utils = require('./utils')
 
 const skillName = 'BFI Book Engine';
 
@@ -231,7 +231,7 @@ KidsService.prototype.setLastReq = function () {
       break;
     default:
       session.lastReq = 'basic';
-      session.decision = `Description of ${this.appendBooktitleAndAuthor()}`;
+      session.decision = `Description of ${utils.core.appendBookTitleAndAuthor({ book: bookName, author: authorName })}`;
       break;
   }
 };
@@ -239,11 +239,17 @@ KidsService.prototype.setLastReq = function () {
 KidsService.prototype.handleYesRequest = function (done) {
   const shouldEndSession = this.shouldEndSession();
   const repromptText = messages.messageReprompt();
-  const card = utils.cards.generateCard();
-  const outputSpeech = utils.speech.generateOutputSpeech();
-  this.setLastReq();
-  done(this.session,
-        { card, outputSpeech, repromptText, shouldEndSession });
+  const card = utils.cards.generateCard({
+    
+  });
+  const outputSpeech = utils.speech.generateOutputSpeech({
+    
+  });
+  this.session = {};
+  done({
+    sessionAttributes: {},
+    speechletResponse: { card, outputSpeech, repromptText, shouldEndSession }
+  });
 };
 
 KidsService.prototype.handleNoRequest = function (done) {
@@ -256,9 +262,11 @@ KidsService.prototype.handleNoRequest = function (done) {
   const outputSpeech = utils.speech.generateOutputSpeech({
     output: messages.messageGoodBye()
   });
-  this.setLastReq();
-  done(this.session,
-        { card, outputSpeech, repromptText, shouldEndSession });
+  this.session = {};
+  done({
+    sessionAttributes: {},
+    speechletResponse: { card, outputSpeech, repromptText: null, shouldEndSession }
+  });
 };
 
 KidsService.prototype.handleBookInfoRequest = function (done) {
@@ -332,19 +340,30 @@ KidsService.prototype.handleBookInfoRequest = function (done) {
         delete resp.popular_shelves; /* No need for this in future requests, so deleting it to reduce the json size */
         this.setSession(resp);
         const card = utils.cards.generateCard({
+          url: book.url,
           small_image_url: book.small_image_url,
           image_url: book.image_url,
           book: book.title,
           author: author.name,
           decision: this.session.lastReq,
+          lastReq: this.session.lastReq,
+          description: book.description,
           skillName,
-          intentName: 'GetBookInfo'
+          intentName: 'GetBookInfo',
+          session: this.session,
+          similar_books: book.similar_books
         });
         const outputSpeech = utils.speech.generateOutputSpeech({
-          ook: book.title,
+          url: book.url,
+          small_image_url: book.small_image_url,
+          image_url: book.image_url,
+          book: book.title,
           author: author.name,
           decision: this.session.lastReq,
-          description: book.description, 
+          lastReq: this.session.lastReq,
+          description: book.description,
+          skillName,
+          intentName: 'GetBookInfo',
           session: this.session,
           similar_books: book.similar_books
         });

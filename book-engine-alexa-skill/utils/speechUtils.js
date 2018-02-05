@@ -7,9 +7,9 @@
 const speechUtils = {}
 
 /* OutputSpeech related methods */
-speechUtils.generateOutputSpeech = (params) => {
+speechUtils.generateOutputSpeech = function (params) {
     const {
-      output
+      book, author, lastReq, description, session, similar_books, output
     } = params;
     const outputSpeech = {
       type: 'PlainText',
@@ -18,7 +18,7 @@ speechUtils.generateOutputSpeech = (params) => {
     return outputSpeech
   }
   
-speechUtils.generateSpeechText = (params) => {
+speechUtils.generateSpeechText = function (params) {
     const { book, author, lastReq, description, session, similar_books } = params
     const resp = {}
     switch (lastReq) {
@@ -44,7 +44,7 @@ speechUtils.generateSpeechText = (params) => {
     return resp
 }
 
-speechUtils.getSimiliarBooks = (params) => {
+speechUtils.getSimiliarBooks = function (params) {
     const { book, similar_books } = params
     if (!similar_books.length) return `We do not have any books similar to ${book}`;
         let text = 'List of similar books: ';
@@ -56,4 +56,4 @@ speechUtils.getSimiliarBooks = (params) => {
     return text;
 }
 
-export default speechUtils
+module.exports = speechUtils

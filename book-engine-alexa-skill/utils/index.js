@@ -1,8 +1,8 @@
 'use strict'
 
-import cardsUtils from './cardsUtils'
-import speechUtils from './speechUtils'
-import coreUtils from './coreUtils'
+const cardsUtils = require('./cardsUtils')
+const speechUtils = require('./speechUtils')
+const coreUtils = require('./coreUtils')
 
 const utils = {
     cards: cardsUtils,
@@ -10,4 +10,4 @@ const utils = {
     core: coreUtils
 }
 
-export default utils
+module.exports = utils

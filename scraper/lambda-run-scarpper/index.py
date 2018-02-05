@@ -2,7 +2,49 @@
 __author__ = 'hmharshit'
 import urllib.request
 from bs4 import BeautifulSoup
+from pymongo import MongoClient
 
+
+genres = [
+"art",
+"Biography",
+"Business",
+"Chick Lit",
+"Children's",
+"Christian",
+"Classics",
+"Comics",
+"Contemporary",
+"Cookbooks",
+"Crime",
+"Ebooks",
+"Fantasy",
+"Fiction",
+"Gay and Lesbian",
+"Graphic Novels",
+"Historical Fiction",
+"History,"
+"Horror",
+"Manga",
+"Memoir",
+"Music",
+"Mystery",
+"Nonfiction",
+"Paranormal",
+"Philosophy",
+"Poetry",
+"Psychology",
+"Religion",
+"Romance",
+"Science",
+"Science Fiction",
+"Suspense",
+"Spirituality",
+"Sports",
+"Thriller",
+"Travel",
+"Young Adult"
+]
 
 class GoodReadsCrawler:
     popular_all_time_books_url = 'https://www.goodreads.com/shelf/show/'
@@ -50,12 +92,21 @@ class GoodReadsCrawler:
         soup = BeautifulSoup(resp, 'lxml')
         return soup
 
-def scrap(genre):
+def scrap(genre, scrapedBooks):
     scraper = GoodReadsCrawler(genre)
     scraper.scarpMostPopularBooks()
     scraper.scarpWeeklyPopularBooks()
-    # print(scraper.response["most_read_this_week"])
-    # print(scraper.response["most_popular"])
-    return scraper.response
+    scrapedBooks.insert_one({
+        genre: scraper.response
+    })
 
-scrap('business')
+def init():
+    client = MongoClient() #Pass mongo url
+    db = client['bfi-book-engine']
+    db.authenticate('mukul', 'mukul123')
+    scrapedBooks = db['scraped-books']
+    for genre in genres:
+        print('Scraping ' + genre)
+        scrap(genre, scrapedBooks)
+
+init()
