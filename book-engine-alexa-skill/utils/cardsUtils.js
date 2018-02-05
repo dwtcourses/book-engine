@@ -4,11 +4,12 @@
 
 'use strict'
 
-import coreUtils from './coreUtils'
+const coreUtils = require('./coreUtils')
+const speechUtils = require('./speechUtils')
 
 const cardsUtils = {}
 
-cardsUtils.generateCardTitle = (params) => {
+cardsUtils.generateCardTitle = function (params) {
     const {
         skillName, decision, book, author
     } = params
@@ -19,26 +20,28 @@ cardsUtils.generateCardTitle = (params) => {
     return text
   };
   
-  cardsUtils.generateCardText = (params) => {
+  cardsUtils.generateCardText = function (params) {
     const {
-        intentName, url
+        intentName, book, author, lastReq, description, session, similar_books, url
     } = params
-    let text = this.generateSpeechText().speechOutput
+    let text = speechUtils.generateSpeechText({
+      book, author, lastReq, description, session, similar_books
+    }).speechOutput
     if (intentName === 'GetBookInfo') {
       text += ` GoodReads URL: ${url}`
     }
     return text
   };
   
-  cardsUtils.generateCard = (params) => {
+  cardsUtils.generateCard = function (params) {
     const {
-        cardTitle, cardText, small_image_url, image_url, book, author, decision, skillName, intentName
+      lastReq, cardTitle, cardText, small_image_url, image_url, book, author, decision, skillName, intentName, url, description, session, similar_books
     } = params
     const card = {
       type: 'Standard',
-      title: cardTitle || this.generateCardTitle({ book, author }),
-      text: cardText || this.generateCardText({ intentName, url }),
-      content: cardText || this.generateCardText({ intentName, url })
+      title: cardTitle || this.generateCardTitle({ book, author, skillName, decision }),
+      text: cardText || this.generateCardText({ url, lastReq, intentName, book, author, lastReq, description, session, similar_books }),
+      content: cardText || this.generateCardText({ url, lastReq, intentName, book, author, lastReq, description, session, similar_books })
     }
     if (intentName === 'GetBookInfo') {
       card.image = {};
@@ -49,4 +52,4 @@ cardsUtils.generateCardTitle = (params) => {
     return card;
   };
 
-export default cardsUtils
+  module.exports = cardsUtils
