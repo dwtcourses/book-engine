@@ -27,4 +27,4 @@ coreUtils.generateEndPointAndCardTitle = (params) => {
     return resp;
 };
 
-export default coreUtils
+module.exports = coreUtils
