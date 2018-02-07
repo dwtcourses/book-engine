@@ -4,7 +4,7 @@
 
 'use strict'
 
-const speechUtils = {}
+const speechUtils = {};
 
 /* OutputSpeech related methods */
 speechUtils.generateOutputSpeech = function (params) {

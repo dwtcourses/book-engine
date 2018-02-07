@@ -188,7 +188,6 @@ KidsService.prototype.handleIntentRequest = function (done) {
 KidsService.prototype.shouldEndSession = function () {
   const { session } = this;
   let flag = true;
-  console.log(session.lastReq)
   switch (session.lastReq) {
     case 'basic':
       flag = false;
@@ -239,17 +238,40 @@ KidsService.prototype.setLastReq = function () {
 KidsService.prototype.handleYesRequest = function (done) {
   const shouldEndSession = this.shouldEndSession();
   const repromptText = messages.messageReprompt();
+  const {
+    book, author
+  } = this.session;
   const card = utils.cards.generateCard({
-    
+    url: book.url,
+    small_image_url: book.small_image_url,
+    image_url: book.image_url,
+    book: book.title,
+    author: author.name,
+    decision: this.session.lastReq,
+    lastReq: this.session.lastReq,
+    description: book.description,
+    skillName,
+    intentName: 'GetBookInfo',
+    session: this.session,
+    similar_books: book.similar_books
   });
   const outputSpeech = utils.speech.generateOutputSpeech({
-    
+    url: book.url,
+    small_image_url: book.small_image_url,
+    image_url: book.image_url,
+    book: book.title,
+    author: author.name,
+    decision: this.session.lastReq,
+    lastReq: this.session.lastReq,
+    description: book.description,
+    skillName,
+    intentName: 'GetBookInfo',
+    session: this.session,
+    similar_books: book.similar_books
   });
   this.session = {};
-  done({
-    sessionAttributes: {},
-    speechletResponse: { card, outputSpeech, repromptText, shouldEndSession }
-  });
+  return done(this.session,
+            { card, outputSpeech, repromptText: null, shouldEndSession: false });
 };
 
 KidsService.prototype.handleNoRequest = function (done) {
