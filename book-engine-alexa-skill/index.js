@@ -26,7 +26,7 @@ exports.handler = (event, context, callback) => {
           reqType: event.request.type,
           appId: event.session.application.applicationId,
           intentName: event.request.intent ? event.request.intent.name : null,
-          bookGenre: event.request.intent.slots.BookGenre.value
+          bookGenre: (event.request.intent && event.request.intent.slots) ? event.request.intent.slots.BookGenre.value : null
         });
         bookEngineService.logRequest();
         return bookEngineService.handleIntent();

@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "goodreads-json-api": "^1.0.4",
+    "mongoose": "^5.0.3",
     "winston": "^2.4.0",
     "winston-papertrail": "^1.0.5"
   },

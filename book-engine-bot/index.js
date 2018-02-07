@@ -11,11 +11,9 @@ const helpMessage = 'Here\'s what you can ask book-engine-bot: \n'+
                     '2. Tell me about The Jungle book\n' +
                     '3. Who is author of The fault in our stars\n' +
                     '4. Similar books like The Lord of the rings\n' +
-                    '5. Give me a short description of The Women on the Train\n\n' +
-                    'In future, you will also be able to ask: \n' +
-                    '1. Tell me most popular most popular contemporary books\n' +
-                    '2. What are most famous YA books?\n' +
-                    '3. The books from author XYZ';
+                    '5. Give me a short description of The Women on the Train\n' +
+                    '6. Tell me most popular books of contemporary type\n' +
+                    '7. Tell me most read this week books of mystery type\n\n' ;
 
 const elicitSlot = (sessionAttributes, intentName, slots, slotToElicit, message) => {
     return {
@@ -135,6 +133,18 @@ const getSimilarBooks = (intentRequest, callback) => {
         .catch((err) => errorHandle(callback, err));
 }
 
+const BFIBookEngineWeeklyBooks = (intentRequest, callback) => {
+    return handleReq(intentRequest)
+        .then((resp) => {
+            const {
+                response
+            } = resp;
+            return callback(close(intentRequest.sessionAttributes, 'Fulfilled',
+            { contentType: 'PlainText', content: response }));
+        })
+        .catch((err) => errorHandle(callback, err));
+}
+
 const dispatch = (intentRequest, callback) => {
     alexaLogger.logInfo(`dispatch userId=${intentRequest.userId}, intentName=${intentRequest.currentIntent.name}`);
     const intentName = intentRequest.currentIntent.name;
@@ -161,6 +171,9 @@ const dispatch = (intentRequest, callback) => {
     else if (intentName === 'BFIBookEngineStopIntent') {
         return callback(close(intentRequest.sessionAttributes, 'Fulfilled',
             { contentType: 'PlainText', content: 'Valar Morghulis!\n Thank you for using BFI Book Engine Bot' }));
+    }
+    else if (intentName === 'BFIBookEngineWeeklyBooks') {
+        return getBFIBookEngineWeeklyBooks(intentRequest, callback);
     }
     else {
         return callback(close(intentRequest.sessionAttributes, 'Fulfilled',
