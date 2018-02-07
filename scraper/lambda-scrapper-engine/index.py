@@ -10,7 +10,7 @@ print(os.environ['HOME'])
 client = boto3.client('lambda')
 
 genres = [
-"art",
+"Art",
 "Biography",
 "Business",
 "Chick Lit",

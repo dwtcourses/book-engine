@@ -6,7 +6,7 @@ from pymongo import MongoClient
 
 
 genres = [
-"art",
+"Art",
 "Biography",
 "Business",
 "Chick Lit",
@@ -97,16 +97,22 @@ def scrap(genre, scrapedBooks):
     scraper.scarpMostPopularBooks()
     scraper.scarpWeeklyPopularBooks()
     scrapedBooks.insert_one({
-        genre: scraper.response
+        'most_read_this_week': scraper.response['most_read_this_week'],
+        'most_popular': scraper.response['most_popular'],
+        'genre': genre
     })
 
 def init():
     client = MongoClient() #Pass mongo url
     db = client['bfi-book-engine']
-    db.authenticate('mukul', 'mukul123')
+    db.authenticate() #pass creds
     scrapedBooks = db['scraped-books']
     for genre in genres:
-        print('Scraping ' + genre)
-        scrap(genre, scrapedBooks)
+        try:
+            print('Scraping ' + genre)
+            scrap(genre, scrapedBooks)
+        except expression as identifier:
+            continue
+        
 
 init()

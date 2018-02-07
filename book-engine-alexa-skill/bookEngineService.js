@@ -15,6 +15,7 @@ const https = require('https')
 const messages = require('./messages')
 const alexaLogger = require('./logger')
 const utils = require('./utils')
+const ScrapedBooksModel = require('./model')
 
 const skillName = 'BFI Book Engine';
 
@@ -23,11 +24,12 @@ const skillName = 'BFI Book Engine';
  */
 function KidsService(params) {
   const {
-        book, author, intent, session, requestId, reqType, appId, sessionId, intentName
+        book, author, bookGenre, intent, session, requestId, reqType, appId, sessionId, intentName
     } = params;
   this.name = 'BFI Book Engine';
   this.book = book;
   this.author = author;
+  this.bookGenre = bookGenre;
   this.intent = intent || {};
   this.session = session || {};
   this.requestId = requestId;
@@ -180,9 +182,51 @@ KidsService.prototype.handleIntentRequest = function (done) {
     case 'GetBookInfo':
       this.handleBookInfoRequest((sessionAttributes, speechletResponse) => done({ sessionAttributes, speechletResponse }));
       break;
+    case 'GetAllTimePopularBooks':
+      this.handleGetAllTimePopularBooksRequest((sessionAttributes, speechletResponse) => done({ sessionAttributes, speechletResponse }));
+      break;
+    case 'GetPopularWeeklyBooks':
+      this.handleGetPopularWeeklyBooksRequest((sessionAttributes, speechletResponse) => done({ sessionAttributes, speechletResponse }));
+      break;
     default:
       break;
   }
+};
+
+KidsService.prototype.handleGetAllTimePopularBooksRequest = function (done) {
+  const bookGenre = this.bookGenre;
+  ScrapedBooksModel.findOne({ genre: bookGenre })
+    .then((scrapedData) => {
+      scrapedData = scrapedData.toJSON();
+      this.session = {};
+      const card = utils.cards.generateCard({
+        cardTitle: `Most Popular ${bookGenre} Books of All-time`,
+        cardText: 'For more, refer goodreads site.'
+      });
+      const outputSpeech = utils.speech.generateOutputSpeech({
+        output: `Alltime Most popular ${bookGenre} books are: ${scrapedData.most_popular.slice(0, 9).map(book => book.title).toString()}`
+      });
+      return done(this.session,
+                { card, outputSpeech, repromptText: null, shouldEndSession: true });
+    })
+};
+
+KidsService.prototype.handleGetPopularWeeklyBooksRequest = function (done) {
+  const bookGenre = this.bookGenre;
+  ScrapedBooksModel.findOne({ genre: bookGenre })
+    .then((scrapedData) => {
+      scrapedData = scrapedData.toJSON();
+      this.session = {};
+      const card = utils.cards.generateCard({
+        cardTitle: `Most Read Weekly ${bookGenre} Books`,
+        cardText: 'For more, refer goodreads site.'
+      });
+      const outputSpeech = utils.speech.generateOutputSpeech({
+        output: `Most popular ${bookGenre} books for this week are: ${scrapedData.most_read_this_week.slice(0, 9).map(book => book.title).toString()}`
+      });
+      return done(this.session,
+                { card, outputSpeech, repromptText: null, shouldEndSession: true });
+    })
 };
 
 KidsService.prototype.shouldEndSession = function () {
