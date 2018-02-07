@@ -14,11 +14,11 @@ def clean_data(old_file_name, new_file_name):
         try:
             for row in csv_f:
                 row_data = str(row[0]).split(";")
-                first_row = "'{}'".format(row_data[0])
-                second_row = "'{}'".format(row_data[1][1:-1])
+                first_column = "'{}'".format(row_data[0])
+                second_column = "'{}'".format(row_data[1][1:-1])
                 rating = row_data[2][1:-1]
                 ratings = math.floor(int(rating) / 2)
-                data.append([first_row, second_row, ratings])
+                data.append([first_column, second_column, ratings])
                 frequncy += 1
         except UnicodeDecodeError:
             continue
