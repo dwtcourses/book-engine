@@ -1,0 +1,6 @@
+node_modules/
+build/
+.lambda/
+.env
+deploy.env
+event.json

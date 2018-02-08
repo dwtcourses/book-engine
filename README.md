@@ -5,8 +5,8 @@ This is an open source project under Paytm - Build for India initiative, which w
 
 I have created a rough prototype for this project to demonstrate, how it will work. 
 - Video Link [here](https://www.youtube.com/watch?v=SSisLp8Z_Ag)
-- Source code [here](https://github.com/PaytmBuildForIndia/book-engine/kids-classic-books-alexa-skill)
-- Documentation [here](https://github.com/PaytmBuildForIndia/book-engine/kids-classic-books-alexa-skill/README.md)
+- Source code [here](https://github.com/PaytmBuildForIndia/book-engine/tree/master/kids-classic-books-alexa-skill)
+- Documentation [here](https://github.com/PaytmBuildForIndia/book-engine/blob/master/kids-classic-books-alexa-skill/README.md)
 - Alexa Skill [here](https://www.amazon.com/dp/B078TLNT39/). This skill was part of Alexa Skills Kids Challenge 2018
 
 ## Future Scope and Plans
@@ -28,4 +28,6 @@ TBD (Soon to be added, eslint, lambda function, scrappers etc)
 
 ## Contributors
 
-- [Mukul Jain](https://www.twitter.com/mukul1904)
+- [Mukul Jain](https://www.twitter.com/mukul1904)(Mentor and developer)
+- [Hitesh Nankani](https://twitter.com/hiteshn97)
+- [Harshit](https://twitter.com/hmharshitharsh)
