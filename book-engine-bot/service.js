@@ -1,10 +1,9 @@
-import { reject } from '../../../../Library/Caches/typescript/2.6/node_modules/@types/async';
-
 'use strict';
 
 const goodReadsJSONResponse = require('goodreads-json-api');
 const https = require('https');
 const mongoose = require('mongoose')
+const scrapBooksModel = mongoose.model('scraped-books', {}, 'scraped-books');
 
 const GOODREADS_KEY = process.env.GOODREADS_KEY;
 const alexaLogger = require('./logger');
@@ -92,17 +91,16 @@ const handleReq = (intentRequest) => {
 
   const scrapeService = (intentRequest) => {
     return new Promise((resolve, reject) => {
-      const genre = ntentRequest.currentIntent.slots.BookGenre;
-      const type = ntentRequest.currentIntent.slots.OperationType;
+      const bookGenre = intentRequest.currentIntent.slots.BookGenre;
+      const type = intentRequest.currentIntent.slots.OperationType;
       mongoose.connect(process.env.MONGO_URL)
         .then(() => {
-          const scrapBooksModel = mongoose.model('scraped-books', {}, 'scraped-books');
           const query = {
-            genre
+            genre: bookGenre
           };
           return scrapBooksModel.findOne(query)
         })
-        then((scrapedData) => {
+        .then((scrapedData) => {
           scrapedData = scrapedData.toJSON();
           let OperationType;
           if (type === 'most read this week') {
@@ -110,14 +108,19 @@ const handleReq = (intentRequest) => {
           } else if (type === 'most popular') {
             OperationType = 'most_popular'
           }
+          mongoose.disconnect();
           return resolve({
             response: `${type} ${bookGenre} books are: ${scrapedData[OperationType].slice(0, 9).map(book => book.title).toString()}`
           });
         })
-        .catch((err) => reject(err))
+        .catch((err) => {
+          mongoose.disconnect();
+          return reject(err);
+        })
     });
   }
 
   module.exports = {
-    handleReq
+    handleReq,
+    scrapeService
   }

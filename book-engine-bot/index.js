@@ -4,7 +4,7 @@
 'use strict';
 
 const alexaLogger = require('./logger');
-const{ handleReq } = require('./service');
+const{ handleReq, scrapeService } = require('./service');
 
 const helpMessage = 'Here\'s what you can ask book-engine-bot: \n'+
                     '1. Tell me about Harry Potter by JK Rowlings \n' +
@@ -133,8 +133,8 @@ const getSimilarBooks = (intentRequest, callback) => {
         .catch((err) => errorHandle(callback, err));
 }
 
-const BFIBookEngineWeeklyBooks = (intentRequest, callback) => {
-    return handleReq(intentRequest)
+const getBFIBookEngineWeeklyBooks = (intentRequest, callback) => {
+    return scrapeService(intentRequest)
         .then((resp) => {
             const {
                 response
@@ -184,7 +184,10 @@ const dispatch = (intentRequest, callback) => {
 exports.handler = (event, context, callback) => {
     try {
         alexaLogger.logInfo(`event.bot.name=${event.bot.name}`);
-        dispatch(event, (response) => callback(null, response));
+        dispatch(event, (response) => {
+            console.log(response);
+            callback(null, response)
+        } )
     } catch (err) {
         callback(err);
     }
