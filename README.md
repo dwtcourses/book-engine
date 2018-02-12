@@ -15,15 +15,16 @@ Test our chatbot here: https://www.facebook.com/BFIBookEngine/. By default you w
 
 I have lots of things in the pipeline, which I will try to integrate into this skill.
 
-- Machine Learning. Based on books requested by user, this skill will be able to suggest books to that user
+- Recomendation System, i.e, based on books requested by user, this skill will be able to suggest books to that user
 - Gets data for Bestsellers
 - List of books from author, the one user requested
 - Get description and similar books directly in alexa skill
-- ESLint tested code, currently is is not
+- ESLint tested code, currently it is not
 - Use of ECMAScriptX
 - Better and automated release process
 
 Feel free to let me know of more feature you want to add in it by creating feature request.
+Also check our "issues" section, if you want to contribute.
 
 ## Contribution Guide
 
