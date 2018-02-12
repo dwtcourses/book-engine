@@ -10,7 +10,6 @@ genres = [
 "Biography",
 "Business",
 "Chick Lit",
-"Children's",
 "Christian",
 "Classics",
 "Comics",
@@ -23,7 +22,7 @@ genres = [
 "Gay and Lesbian",
 "Graphic Novels",
 "Historical Fiction",
-"History,"
+"History",
 "Horror",
 "Manga",
 "Memoir",
@@ -94,18 +93,20 @@ class GoodReadsCrawler:
 
 def scrap(genre, scrapedBooks):
     scraper = GoodReadsCrawler(genre)
+    scraper.response['most_read_this_week'] = []
+    scraper.response['most_popular'] = []
     scraper.scarpMostPopularBooks()
     scraper.scarpWeeklyPopularBooks()
     scrapedBooks.insert_one({
-        'most_read_this_week': scraper.response['most_read_this_week'],
-        'most_popular': scraper.response['most_popular'],
+        'most_read_this_week': scraper.response['most_read_this_week'][0:10],
+        'most_popular': scraper.response['most_popular'][0:10],
         'genre': genre
     })
 
 def init():
-    client = MongoClient() #Pass mongo url
+    client = MongoClient('') #Pass mongo url
     db = client['bfi-book-engine']
-    db.authenticate() #pass creds
+    db.authenticate() #pass creds: db.authenticate(<username>, <password>)
     scrapedBooks = db['scraped-books']
     for genre in genres:
         try:
