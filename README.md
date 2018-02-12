@@ -18,8 +18,10 @@ I have lots of things in the pipeline, which I will try to integrate into this s
 - Machine Learning. Based on books requested by user, this skill will be able to suggest books to that user
 - Gets data for Bestsellers
 - List of books from author, the one user requested
+- Get description and similar books directly in alexa skill
 - ESLint tested code, currently is is not
 - Use of ECMAScriptX
+- Better and automated release process
 
 Feel free to let me know of more feature you want to add in it by creating feature request.
 
@@ -37,6 +39,12 @@ Feel free to let me know of more feature you want to add in it by creating featu
 
 Skill is built using AWS ASK, which invokes [this](https://github.com/PaytmBuildForIndia/book-engine/tree/master/book-engine-alexa-skill) lambda function on every user-req. This is build using nodejs.
 
+```
+Ask book engine, to tell me most popular business books of all time
+Ask book engine, to tell me most read young adult books for this week
+Ask book engine, to tell me about The Harry Potter
+```
+
 ### Chatbot
 
 Chatbot is built using AWS Lex, which invokes [this](https://github.com/PaytmBuildForIndia/book-engine/tree/master/book-engine-bot) lambda function on every message. This is build using nodejs.
@@ -52,6 +60,9 @@ What type of requests chatbot can answer right now:
 7. Tell me most read this week books of mystery type
 ```
 
+### Run apps in local enviornment
+
+TBD
 
 ## Contributors
 
