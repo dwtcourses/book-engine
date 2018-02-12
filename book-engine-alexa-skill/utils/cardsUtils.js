@@ -14,7 +14,7 @@ cardsUtils.generateCardTitle = function (params) {
         skillName, decision, book, author
     } = params
     let text = skillName
-    const titleAndAuthor = coreUtils.appendBookTitleAndAuthor(book, author)
+    const titleAndAuthor = coreUtils.appendBookTitleAndAuthor({ book, author })
     if (typeof decision !== 'undefined') text += ` - ${decision}`
     else text += ` - ${titleAndAuthor}`
     return text

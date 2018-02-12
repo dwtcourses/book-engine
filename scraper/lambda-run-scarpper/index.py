@@ -100,7 +100,7 @@ def scrap(genre, scrapedBooks):
     scrapedBooks.insert_one({
         'most_read_this_week': scraper.response['most_read_this_week'][0:10],
         'most_popular': scraper.response['most_popular'][0:10],
-        'genre': genre
+        'genre': genre.lower()
     })
 
 def init():

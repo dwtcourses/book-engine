@@ -1,22 +1,25 @@
 # book-engine
 This is an open source project under Paytm - Build for India initiative, which will give the recommendation, predictions and search results based on author, genre and book title/ISBN
 
-## Prototype
+## Working Features
 
 I have created a rough prototype for this project to demonstrate, how it will work. 
 - Video Link [here](https://www.youtube.com/watch?v=SSisLp8Z_Ag)
 - Source code [here](https://github.com/PaytmBuildForIndia/book-engine/tree/master/kids-classic-books-alexa-skill)
 - Documentation [here](https://github.com/PaytmBuildForIndia/book-engine/blob/master/kids-classic-books-alexa-skill/README.md)
 - Alexa Skill [here](https://www.amazon.com/dp/B078TLNT39/). This skill was part of Alexa Skills Kids Challenge 2018
-- Test our chatbot here: https://www.facebook.com/BFIBookEngine/. By default you won't get any response, as it is in develpment, so send me your email id (the one you are registered on FaceBook) on twitter and I will add you as tester for chatbot. My twitter handle is @mukul1904
+
+Test our chatbot here: https://www.facebook.com/BFIBookEngine/. By default you won't get any response, as it is in develpment, so send me your fb id and I will add you as tester for chatbot.
 
 ## Future Scope and Plans
 
-I have lots of things in the pipeline, which I will be integrating into this skill.
+I have lots of things in the pipeline, which I will try to integrate into this skill.
 
 - Machine Learning. Based on books requested by user, this skill will be able to suggest books to that user
 - Gets data for Bestsellers
 - List of books from author, the one user requested
+- ESLint tested code, currently is is not
+- Use of ECMAScriptX
 
 Feel free to let me know of more feature you want to add in it by creating feature request.
 
@@ -30,8 +33,28 @@ Feel free to let me know of more feature you want to add in it by creating featu
 
 - For nodejs we use ESLint to help make our code clean.
 
+### Alexa Skills
+
+Skill is built using AWS ASK, which invokes [this](https://github.com/PaytmBuildForIndia/book-engine/tree/master/book-engine-alexa-skill) lambda function on every user-req. This is build using nodejs.
+
+### Chatbot
+
+Chatbot is built using AWS Lex, which invokes [this](https://github.com/PaytmBuildForIndia/book-engine/tree/master/book-engine-bot) lambda function on every message. This is build using nodejs.
+
+What type of requests chatbot can answer right now:
+```
+1. Tell me about Harry Potter by JK Rowlings 
+2. Tell me about The Jungle book
+3. Who is author of The fault in our stars
+4. Similar books like The Lord of the rings
+5. Give me a short description of The Women on the Train
+6. Tell me most popular books of young adult type
+7. Tell me most read this week books of mystery type
+```
+
+
 ## Contributors
 
-- [Mukul Jain](https://www.twitter.com/mukul1904)(Mentor and developer)
+- [Mukul Jain](https://www.twitter.com/mukul1904) (Mentor and developer)
 - [Hitesh Nankani](https://twitter.com/hiteshn97)
 - [Harshit](https://twitter.com/hmharshitharsh)

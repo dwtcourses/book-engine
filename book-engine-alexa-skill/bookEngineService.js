@@ -188,9 +188,29 @@ KidsService.prototype.handleIntentRequest = function (done) {
     case 'GetPopularWeeklyBooks':
       this.handleGetPopularWeeklyBooksRequest((sessionAttributes, speechletResponse) => done({ sessionAttributes, speechletResponse }));
       break;
+    case 'WelcomeIntent':
+      this.handleWelcomeIntent((sessionAttributes, speechletResponse) => done({ sessionAttributes, speechletResponse }));
+      break;
     default:
       break;
   }
+};
+
+KidsService.prototype.handleWelcomeIntent = function (done) {
+  const card = {
+    type: 'Standard',
+    title: 'Welcome to Build for India Book Engine',
+    text: 'Welcome to Build for India Book Engine. Say \'help\' to get sample questions.',
+    content: 'Welcome to Build for India Book Engine. Say \'help\' to get sample questions.'
+  }
+
+  const outputSpeech = {
+    type: 'PlainText',
+    text: 'Welcome to Build for India Book Engine. Say \'help\' to get sample questions.',
+  }
+  
+  return done(this.session,
+    { card, outputSpeech, repromptText: messages.repromptGreeting, shouldEndSession: false });
 };
 
 KidsService.prototype.handleGetAllTimePopularBooksRequest = function (done) {
