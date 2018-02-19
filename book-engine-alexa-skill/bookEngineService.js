@@ -303,7 +303,7 @@ KidsService.prototype.handleYesRequest = function (done) {
   const shouldEndSession = this.shouldEndSession();
   const repromptText = messages.messageReprompt();
   const {
-    book, author
+    book, author, similar_books
   } = this.session;
   const card = utils.cards.generateCard({
     url: book.url,
@@ -317,7 +317,7 @@ KidsService.prototype.handleYesRequest = function (done) {
     skillName,
     intentName: 'GetBookInfo',
     session: this.session,
-    similar_books: book.similar_books
+    similar_books: similar_books
   });
   const outputSpeech = utils.speech.generateOutputSpeech({
     url: book.url,
@@ -331,11 +331,12 @@ KidsService.prototype.handleYesRequest = function (done) {
     skillName,
     intentName: 'GetBookInfo',
     session: this.session,
-    similar_books: book.similar_books
+    similar_books: similar_books
   });
-  this.session = {};
+  this.setLastReq();
+  this.session = this.session;
   return done(this.session,
-            { card, outputSpeech, repromptText: null, shouldEndSession: false });
+            { card, outputSpeech, repromptText: null, shouldEndSession });
 };
 
 KidsService.prototype.handleNoRequest = function (done) {
@@ -349,10 +350,9 @@ KidsService.prototype.handleNoRequest = function (done) {
     output: messages.messageGoodBye()
   });
   this.session = {};
-  done({
-    sessionAttributes: {},
-    speechletResponse: { card, outputSpeech, repromptText: null, shouldEndSession }
-  });
+  done(this.session,
+    { card, outputSpeech, repromptText, shouldEndSession }
+  );
 };
 
 KidsService.prototype.handleBookInfoRequest = function (done) {
