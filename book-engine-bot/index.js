@@ -52,7 +52,7 @@ const delegate = (sessionAttributes, slots) => {
 const errorHandle= (callback, err) => {
     alexaLogger.logError(err);
     return callback(close({}, 'Fulfilled',
-        { contentType: 'PlainText', content: 'Something went wrong. Please try again later.' }));
+        { contentType: 'PlainText', content: 'Sorry, there is something wrong. Please try again later.' }));
 }
 
 const getAuthor = (intentRequest, callback) => {
@@ -96,6 +96,10 @@ const getBookInfo = (intentRequest, callback) => {
                 popular_shelves,
                 num_pages
             } = resp;
+            if (!bookTitle || typeof bookTitle === 'undefined') {
+                return callback(close(intentRequest.sessionAttributes, 'Fulfilled',
+            { contentType: 'PlainText', content: 'Requested book was not found on Goodreads' }));
+            }
             const content = `${bookTitle} from ${author} was published in ${publication_year} by publisher ${publisher}. `
             + `It consists of ${num_pages} pages. `
             + `Its average rating on Goodreads is ${average_rating} from ${ratings_count} ratings.`;
@@ -165,6 +169,10 @@ const dispatch = (intentRequest, callback) => {
             { contentType: 'PlainText', content: helpMessage }));
     } 
     else if (intentName === 'BFIBookEngineStartOverIntent') {
+        return callback(close(intentRequest.sessionAttributes, 'Fulfilled',
+            { contentType: 'PlainText', content: 'Hey, how are you? What book you have in mind? Say "help" for sample phrases' }));
+    } 
+    else if (intentName === 'BFIBookEngineGreetingIntent') {
         return callback(close(intentRequest.sessionAttributes, 'Fulfilled',
             { contentType: 'PlainText', content: 'Hey, how are you? What book you have in mind? Say "help" for sample phrases' }));
     } 

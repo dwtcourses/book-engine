@@ -69,12 +69,12 @@ const handleReq = (intentRequest) => {
                   bookDesc: book.description,
                   publication_year: book.publication_year,
                   publisher: book.publisher,
-                  average_rating: book.average_rating,
-                  ratings_count: book.ratings_count,
+                  average_rating: book.average_rating || 0,
+                  ratings_count: book.ratings_count || 0,
                   num_pages: book.num_pages,
                   author: author.name,
-                  popular_shelves: popular_shelves,
-                  similar_books: similar_books
+                  popular_shelves: popular_shelves || [],
+                  similar_books: similar_books || []
               });
         
             } catch (e) {
@@ -101,6 +101,11 @@ const handleReq = (intentRequest) => {
           return scrapBooksModel.findOne(query)
         })
         .then((scrapedData) => {
+          if (null) {
+            return resolve({
+              response: `${bookGenre} genre is not supported yet.`
+            });
+          }
           scrapedData = scrapedData.toJSON();
           let OperationType;
           if (type === 'most read this week') {
