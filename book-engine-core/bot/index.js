@@ -24,7 +24,8 @@ const {
     errMessage,
     goodbyeMessage,
     aboutBFI,
-    contactUsMessage
+    contactUsMessage,
+    missingBook
 } = require('../messages');
 
 const elicitSlot = (sessionAttributes, intentName, slots, slotToElicit, message) => {

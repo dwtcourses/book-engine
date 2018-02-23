@@ -10,6 +10,9 @@ const {
     handleBookInfoReq,
     scrapeService 
 } = require('./service');
+const {
+    missingBook
+} = require('./messages');
 
 const getAuthor = (params) => {
     const {
@@ -18,6 +21,9 @@ const getAuthor = (params) => {
     return new Promise((resolve, reject) => {
         return handleBookInfoReq({ authorName, bookTitle })
             .then((resp) => {
+                if (!resp) {
+                    return resolve(missingBook(bookTitle));
+                }
                 const {
                     book,
                     author
@@ -35,6 +41,9 @@ const getBookInfo = (params) => {
     return new Promise((resolve, reject) => {
         return handleBookInfoReq({ authorName, bookTitle })
             .then((resp) => {
+                if (!resp) {
+                    return resolve(missingBook(bookTitle));
+                }
                 const {
                     popular_shelves, book, author, similar_books
                 } = resp;
@@ -57,6 +66,9 @@ const getDescription = (params) => {
     return new Promise((resolve, reject) => {
         return handleBookInfoReq({ authorName, bookTitle })
             .then((resp) => {
+                if (!resp) {
+                    return resolve(missingBook(bookTitle));
+                }
                 const {
                     popular_shelves, book, author, similar_books
                 } = resp;
@@ -73,6 +85,9 @@ const getSimilarBooks = (params) => {
     return new Promise((resolve, reject) => {
         return handleBookInfoReq({ authorName, bookTitle })
             .then((resp) => {
+                if (!resp) {
+                    return resolve(missingBook(bookTitle));
+                }
                 const {
                     popular_shelves, book, author, similar_books
                 } = resp;

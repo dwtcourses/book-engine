@@ -87,8 +87,9 @@ const handleBookInfoReq = (params) => {
           const contentType = res.headers['content-type'];
           let error;
           if (statusCode !== 200) {
-            error = new Error('Request Failed.\n' +
+            alexaLogger.logError('Request Failed.\n' +
                       `Status Code: ${statusCode}`);
+            return resolve(null);
           }
           /**
            * In case statusCode is not 200
@@ -96,7 +97,7 @@ const handleBookInfoReq = (params) => {
           if (error) {
             alexaLogger.logError(error.message);
             // consume response data to free up memory
-            res.resume();
+            return resolve(null);
           }
       
           res.setEncoding('utf8');

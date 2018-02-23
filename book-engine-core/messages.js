@@ -18,5 +18,6 @@ module.exports = {
     errMessage: 'Sorry, there is something wrong. Please try again later.',
     goodbyeMessage: 'Valar Morghulis!\n Thank you for using BFI Book Engine',
     aboutBFI: '',
-    contactUsMessage: ''
+    contactUsMessage: '',
+    missingBook: book => `Requested book ${book} was not found in Goodreads records`
 };
