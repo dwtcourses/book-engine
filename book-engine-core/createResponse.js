@@ -111,9 +111,10 @@ const getWeeklyPopularBooks = (params) => {
         return scrapeService({ type: 'most read this week', bookGenre })
             .then((resp) => {
                 const {
-                    response
+                    response,
+                    confirmIntent
                 } = resp;
-                return resolve(response);
+                return resolve({response, confirmIntent });
             })
             .catch((err) => reject(err));
     });
@@ -127,9 +128,10 @@ const getAllTimePopularBooks = (params) => {
         return scrapeService({ type: 'most popular', bookGenre })
             .then((resp) => {
                 const {
-                    response
+                    response,
+                    confirmIntent
                 } = resp;
-                return resolve(response);
+                return resolve({response, confirmIntent });
             })
             .catch((err) => reject(err));
     });

@@ -6,7 +6,8 @@
 const alexaLogger = require('../logger');
 const { 
     handleBookInfoReq,
-    scrapeService 
+    scrapeService,
+    genres
 } = require('../service');
 
 const {
@@ -48,6 +49,18 @@ const close = (sessionAttributes, fulfillmentState, message) => {
             type: 'Close',
             fulfillmentState,
             message,
+        },
+    };
+}
+
+const confirm = (sessionAttributes, intentName, slots, message) => {
+    return {
+        sessionAttributes,
+        dialogAction: {
+            type: 'ConfirmIntent',
+            intentName,
+            slots,
+            message
         },
     };
 }
@@ -126,29 +139,35 @@ BotFactory.dispatch = (intentRequest, callback) => {
             .catch(err => errorHandle(callback, err));
     }
     else if (intentName === 'BFIBookEngineWeeklyBooks') {
+        let execFunc;
         if (operationType === 'most read this week') {
-            return getWeeklyPopularBooks({ bookGenre })
-                .then((content) => {
-                    return callback(close(
-                        intentRequest.sessionAttributes, 'Fulfilled', {
-                            contentType: 'PlainText',
-                            content
-                        }
-                    ));
-                })
-                .catch(err => errorHandle(callback, err));
+            execFunc = getWeeklyPopularBooks;
         } else if (operationType === 'most popular') {
-            return getAllTimePopularBooks({ bookGenre })
+            execFunc = getAllTimePopularBooks;
+        }
+        return execFunc({ bookGenre })
                 .then((content) => {
+                    const { response, confirmIntent } = content;
+                    if (confirmIntent) {
+                        return callback(confirm(
+                            intentRequest.sessionAttributes, 'BFIBookEngineGetSupportedGenres', {}, {
+                                contentType: 'PlainText',
+                                content: response
+                            }
+                        ));
+                    }
                     return callback(close(
                         intentRequest.sessionAttributes, 'Fulfilled', {
                             contentType: 'PlainText',
-                            content
+                            content: response
                         }
                     ));
                 })
                 .catch(err => errorHandle(callback, err));
-        }
+    }
+    else if (intentName === 'BFIBookEngineGetSupportedGenres') {
+        return callback(close(intentRequest.sessionAttributes, 'Fulfilled',
+            { contentType: 'PlainText', content: `Supported genres are: ${genres.toString()}` }));
     }
     else if (intentName === 'BFIBookEngineHelpIntent') {
         return callback(close(intentRequest.sessionAttributes, 'Fulfilled',

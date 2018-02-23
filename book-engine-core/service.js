@@ -14,43 +14,43 @@ const GOODREADS_KEY = process.env.GOODREADS_KEY;
 const alexaLogger = require('./logger');
 
 const genres = [
-  "Art",
-  "Biography",
-  "Business",
-  "Chick Lit",
-  "Christian",
-  "Classics",
-  "Comics",
-  "Contemporary",
-  "Cookbooks",
-  "Crime",
-  "Ebooks",
-  "Fantasy",
-  "Fiction",
-  "Gay and Lesbian",
-  "Graphic Novels",
-  "Historical Fiction",
-  "History",
-  "Horror",
-  "Manga",
-  "Memoir",
-  "Music",
-  "Mystery",
-  "Nonfiction",
-  "Paranormal",
-  "Philosophy",
-  "Poetry",
-  "Psychology",
-  "Religion",
-  "Romance",
-  "Science",
-  "Science Fiction",
-  "Suspense",
-  "Spirituality",
-  "Sports",
-  "Thriller",
-  "Travel",
-  "Young Adult"
+  "art",
+  "biography",
+  "business",
+  "chick lit",
+  "christian",
+  "classics",
+  "comics",
+  "contemporary",
+  "cookbooks",
+  "crime",
+  "ebooks",
+  "fantasy",
+  "fiction",
+  "gay and lesbian",
+  "graphic novels",
+  "historical fiction",
+  "history",
+  "horror",
+  "manga",
+  "memoir",
+  "music",
+  "mystery",
+  "nonfiction",
+  "paranormal",
+  "philosophy",
+  "poetry",
+  "psychology",
+  "religion",
+  "romance",
+  "science",
+  "science fiction",
+  "suspense",
+  "spirituality",
+  "sports",
+  "thriller",
+  "travel",
+  "young adult"
 ];
 
 const generateBookInfoEndPoint = (params) => {
@@ -128,9 +128,11 @@ const handleBookInfoReq = (params) => {
       const {
         type, bookGenre
       } = params;
+      console.log(bookGenre);
       if (genres.indexOf(bookGenre) === -1) {
         return resolve({
-          response: `${bookGenre} is not supported yet.`
+          response: `${bookGenre} is not supported yet. Do you want to know all the supported genres in Book Engine?`,
+          confirmIntent: true
         });
       }
       mongoose.connect(process.env.MONGO_URL)
@@ -162,5 +164,6 @@ const handleBookInfoReq = (params) => {
 
   module.exports = {
     handleBookInfoReq,
-    scrapeService
+    scrapeService,
+    genres
   }
