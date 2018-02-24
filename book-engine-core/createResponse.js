@@ -14,21 +14,35 @@ const {
     missingBook
 } = require('./messages');
 
+const handleSession = (params) => {
+    return new Promise((resolve) => {
+        const { intent } = params;
+        return resolve(intent.session.attributes);
+    });
+};
+
 const getAuthor = (params) => {
     const {
-        authorName, bookTitle
+        authorName, bookTitle, useSession
     } = params;
+    const execFunct = (useSession) ? handleSession : handleBookInfoReq;
     return new Promise((resolve, reject) => {
-        return handleBookInfoReq({ authorName, bookTitle })
+        return execFunct(params)
             .then((resp) => {
                 if (!resp) {
-                    return resolve(missingBook(bookTitle));
+                    return resolve({
+                        content: missingBook(bookTitle)
+                    });
                 }
                 const {
                     book,
-                    author
+                    author,
+                    similar_books
                 } = resp;
-                return resolve(`Author of ${book.title} is ${author.name}`);
+                return resolve({
+                    content: `Author of ${book.title} is ${author.name}.`,
+                    session: { book, author, similar_books }
+                });
             })
             .catch((err) => reject(err));
     });
@@ -36,24 +50,33 @@ const getAuthor = (params) => {
 
 const getBookInfo = (params) => {
     const {
-        authorName, bookTitle
+        authorName, bookTitle, useSession
     } = params;
+    const execFunct = (useSession) ? handleSession : handleBookInfoReq;
     return new Promise((resolve, reject) => {
-        return handleBookInfoReq({ authorName, bookTitle })
+        return execFunct(params)
             .then((resp) => {
                 if (!resp) {
-                    return resolve(missingBook(bookTitle));
+                    return resolve({
+                        content: missingBook(bookTitle)
+                    });
                 }
                 const {
                     popular_shelves, book, author, similar_books
                 } = resp;
                 if (!book.title || typeof book.title === 'undefined') {
-                    return resolve('Requested book was not found on Goodreads');
+                    return resolve({
+                        content: missingBook(bookTitle),
+                        session: { book, author, similar_books }
+                    });
                 }
                 const content = `${book.title} from ${author.name} was published in ${book.publication_year} by publisher ${book.publisher}. `
                 + `It consists of ${book.num_pages} pages. `
                 + `Its average rating on Goodreads is ${book.average_rating} from ${book.ratings_count} ratings.`;
-                return resolve(content);
+                return resolve({
+                    content,
+                    session: { book, author, similar_books }
+                });
             })
             .catch((err) => reject(err));
     });
@@ -61,18 +84,24 @@ const getBookInfo = (params) => {
 
 const getDescription = (params) => {
     const {
-        authorName, bookTitle
+        authorName, bookTitle, useSession
     } = params;
+    const execFunct = (useSession) ? handleSession : handleBookInfoReq;
     return new Promise((resolve, reject) => {
-        return handleBookInfoReq({ authorName, bookTitle })
+        return execFunct(params)
             .then((resp) => {
                 if (!resp) {
-                    return resolve(missingBook(bookTitle));
+                    return resolve({
+                        content: missingBook(bookTitle)
+                    });
                 }
                 const {
                     popular_shelves, book, author, similar_books
                 } = resp;
-                return resolve(`${book.title} from ${author.name} 's brief description is :: ${book.description}`);
+                return resolve({
+                    content: `${book.title} from ${author.name} 's brief description is :: ${book.description}.`,
+                    session: { book, author, similar_books }
+                });
             })
             .catch((err) => reject(err));
     });
@@ -80,13 +109,16 @@ const getDescription = (params) => {
 
 const getSimilarBooks = (params) => {
     const {
-        authorName, bookTitle
+        authorName, bookTitle, useSession
     } = params;
+    const execFunct = (useSession) ? handleSession : handleBookInfoReq;
     return new Promise((resolve, reject) => {
-        return handleBookInfoReq({ authorName, bookTitle })
+        return execFunct(params)
             .then((resp) => {
                 if (!resp) {
-                    return resolve(missingBook(bookTitle));
+                    return resolve({
+                        content: missingBook(bookTitle)
+                    });
                 }
                 const {
                     popular_shelves, book, author, similar_books
@@ -97,7 +129,10 @@ const getSimilarBooks = (params) => {
                     const bookItem = similar_books[index];
                     text += `${bookItem.title}, `;
                 }
-                return resolve(text);
+                return resolve({
+                    content: text,
+                    session: { book, author, similar_books }
+                });
             })
             .catch((err) => reject(err));
     });
@@ -114,7 +149,10 @@ const getWeeklyPopularBooks = (params) => {
                     response,
                     confirmIntent
                 } = resp;
-                return resolve({response, confirmIntent });
+                return resolve({
+                    content: response,
+                    confirmIntent
+                });
             })
             .catch((err) => reject(err));
     });
@@ -131,7 +169,7 @@ const getAllTimePopularBooks = (params) => {
                     response,
                     confirmIntent
                 } = resp;
-                return resolve({response, confirmIntent });
+                return resolve({ content: response, confirmIntent });
             })
             .catch((err) => reject(err));
     });

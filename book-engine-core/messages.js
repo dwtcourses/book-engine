@@ -19,5 +19,6 @@ module.exports = {
     goodbyeMessage: 'Valar Morghulis!\n Thank you for using BFI Book Engine',
     aboutBFI: '',
     contactUsMessage: '',
+    repromptMessage: 'I am unable to hear your reuqest, can you please repeat?',
     missingBook: book => `Requested book ${book} was not found in Goodreads records`
 };
