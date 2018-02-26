@@ -16,7 +16,7 @@ module.exports = {
                         '6. Tell me most popular books of contemporary type\n' +
                         '7. Tell me most read this week books of mystery type\n\n',
     errMessage: 'Sorry, there is something wrong. Please try again later.',
-    goodbyeMessage: 'Valar Morghulis!\n Thank you for using BFI Book Engine',
+    goodbyeMessage: 'Goodbye. Thank you for using BFI Book Engine',
     aboutBFI: '',
     contactUsMessage: '',
     repromptMessage: 'I am unable to hear your reuqest, can you please repeat?',

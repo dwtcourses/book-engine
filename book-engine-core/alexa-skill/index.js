@@ -30,13 +30,13 @@ const {
     repromptMessage
 } = require('../messages');
 
-const helpAlexaMessage = 'Here\'s what you can ask book-engine: \n, '+
-'Tell me about Harry Potter by JK Rowlings \n, '+
-'Who wrote The fault in our stars\n, ' +
-'Similar books like The Lord of the rings\n, ' +
-'Give me a short description of The Women on the Train\n, ' +
-'Most popular mystery books for this week\n, ' +
-'Most popular horror books for all time\n\n';
+const helpAlexaMessage = '<speak>Here\'s what you can ask book-engine: \n, <break time="0.5s"/> '+
+'Tell me about Harry Potter by JK Rowlings \n, <break time="0.5s"/> '+
+'Who wrote The fault in our stars\n, <break time="0.5s"/> ' +
+'Similar books like The Lord of the rings\n, <break time="0.5s"/> ' +
+'Give me a short description of The Women on the Train\n,<break time="0.5s"/> ' +
+'Most popular mystery books for this week\n,<break time="0.5s"/> ' +
+'Most popular horror books for all time\n\n</speak>';
 
 const appendBookTitleAndAuthor = (params) => {
     const { bookTitle, authorName, useSession, intent } = params;
@@ -177,15 +177,15 @@ AlexaSkillFactory.handleIntentRequest = (intentRequest, useSession=false, callba
         return getWeeklyPopularBooks({ bookGenre })
                 .then((response) => {
                     let { content, confirmIntent } = response;
-                    intentRequest.sessionAttributes.nextIntent = 'BFIBookEngineGetSupportedGenres';
+                    intentRequest.session.attributes.nextIntent = 'BFIBookEngineGetSupportedGenres';
                     if (confirmIntent) {
                         return callback({
-                            sessionAttributes: intentRequest.sessionAttributes,
+                            sessionAttributes: intentRequest.session.attributes,
                             title: `Book Engine supported genres`, output: content, repromptMessage, shouldEndSession: false
                         });
                     }
                     return callback({
-                        sessionAttributes: intentRequest.sessionAttributes,
+                        sessionAttributes: intentRequest.session.attributes,
                         title: `Most read ${bookGenre} books for this week`, output: content, repromptMessage, shouldEndSession: false
                     });
                 })
@@ -195,15 +195,15 @@ AlexaSkillFactory.handleIntentRequest = (intentRequest, useSession=false, callba
         return getAllTimePopularBooks({ bookGenre })
                 .then((response) => {
                     let { content, confirmIntent } = response;
-                    intentRequest.sessionAttributes.nextIntent = 'BFIBookEngineGetSupportedGenres';                    
+                    intentRequest.session.attributes.nextIntent = 'BFIBookEngineGetSupportedGenres';                    
                     if (confirmIntent) {
                         return callback({
-                            sessionAttributes: intentRequest.sessionAttributes,
+                            sessionAttributes: intentRequest.session.attributes,
                             title: `Book Engine supported genres`, output: content, repromptMessage, shouldEndSession: false
                         });
                     }
                     return callback({
-                        sessionAttributes: intentRequest.sessionAttributes,
+                        sessionAttributes: intentRequest.session.attributes,
                         title: `All time popular ${bookGenre} books for this week`, output: content, repromptMessage, shouldEndSession: false
                     });
                 })
@@ -214,9 +214,6 @@ AlexaSkillFactory.handleIntentRequest = (intentRequest, useSession=false, callba
     }
     else if (intentName === 'BFIBookEngineGreetingIntent') {
         return callback({ sessionAttributes: {}, title: 'Welcome to BFI: Book Engine', output: greetingMessage, repromptMessage, shouldEndSession: false });
-    }
-    else if (intentName === 'AMAZON.HelpIntent') {
-        return callback({ sessionAttributes: {}, title: 'Help BFI: Book Engine', output: helpAlexaMessage, repromptMessage, shouldEndSession: false });
     }
     else if (intentName === 'AMAZON.StopIntent') {
         return callback({ sessionAttributes: {}, title: 'Thank you for using BFI: Book Engine', output: goodbyeMessage, repromptMessage: null, shouldEndSession: true });
@@ -253,7 +250,30 @@ AlexaSkillFactory.dispatch = (intentRequest, callback) => {
                     } = resp;
                     return callback(sessionAttributes, delegate(title, output, repromptMessage, shouldEndSession));
                 });
-            } else {
+            } 
+            else if (intentRequest.request.intent.name === 'AMAZON.HelpIntent') {
+                return callback(
+                    {}, {
+                        outputSpeech: {
+                            type: 'SSML',
+                            ssml: helpAlexaMessage,
+                        },
+                        card: {
+                            type: 'Simple',
+                            title: 'Help - BFI: Book Engine',
+                            content: helpAlexaMessage.replace(/<(.|\n)*?>/g, ""),
+                        },
+                        reprompt: {
+                            outputSpeech: {
+                                type: 'PlainText',
+                                text: repromptMessage,
+                            },
+                        },
+                        shouldEndSession: false
+                    }
+                )
+            }
+            else {
                 AlexaSkillFactory.handleIntentRequest(intentRequest, false, (resp) => {
                     const {
                       sessionAttributes, title, output, repromptMessage, shouldEndSession
