@@ -210,7 +210,7 @@ AlexaSkillFactory.handleIntentRequest = (intentRequest, useSession=false, callba
                 .catch(err => errorHandle(callback, err));
     }
     else if (intentName === 'BFIBookEngineGetSupportedGenres') {
-        return callback({ sessionAttributes: {}, title: 'Supported Genres Book Engine', output: genres.toString(), repromptMessage, shouldEndSession: false });
+        return callback({ sessionAttributes: {}, title: 'Supported Genres Book Engine', output: genres.toString(), repromptMessage, shouldEndSession: true });
     }
     else if (intentName === 'BFIBookEngineGreetingIntent') {
         return callback({ sessionAttributes: {}, title: 'Welcome to BFI: Book Engine', output: greetingMessage, repromptMessage, shouldEndSession: false });
