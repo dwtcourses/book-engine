@@ -121,6 +121,7 @@ AlexaSkillFactory.handleIntentRequest = (intentRequest, useSession=false, callba
     if (intentRequest.request.intent.slots && intentRequest.request.intent.slots['BookGenre']) {
         bookGenre = intentRequest.request.intent.slots['BookGenre'].value;   
     }
+    alexaLogger.logInfo(`Intent detected: ${intentName}`);
     if (intentName === 'BFIBookEngineGetBookInfo') {
         return getBookInfo({ bookTitle, authorName, useSession, intent: intentRequest })
             .then((response) => {
@@ -177,16 +178,16 @@ AlexaSkillFactory.handleIntentRequest = (intentRequest, useSession=false, callba
         return getWeeklyPopularBooks({ bookGenre })
                 .then((response) => {
                     let { content, confirmIntent } = response;
-                    intentRequest.session.attributes.nextIntent = 'BFIBookEngineGetSupportedGenres';
+                    intentRequest.session.nextIntent = 'BFIBookEngineGetSupportedGenres';
                     if (confirmIntent) {
                         return callback({
-                            sessionAttributes: intentRequest.session.attributes,
+                            sessionAttributes: intentRequest.session,
                             title: `Book Engine supported genres`, output: content, repromptMessage, shouldEndSession: false
                         });
                     }
                     return callback({
-                        sessionAttributes: intentRequest.session.attributes,
-                        title: `Most read ${bookGenre} books for this week`, output: content, repromptMessage, shouldEndSession: false
+                        sessionAttributes: intentRequest.session,
+                        title: `Most read ${bookGenre} books for this week`, output: content, repromptMessage, shouldEndSession: true
                     });
                 })
                 .catch(err => errorHandle(callback, err));
@@ -195,16 +196,16 @@ AlexaSkillFactory.handleIntentRequest = (intentRequest, useSession=false, callba
         return getAllTimePopularBooks({ bookGenre })
                 .then((response) => {
                     let { content, confirmIntent } = response;
-                    intentRequest.session.attributes.nextIntent = 'BFIBookEngineGetSupportedGenres';                    
+                    intentRequest.session.nextIntent = 'BFIBookEngineGetSupportedGenres';                    
                     if (confirmIntent) {
                         return callback({
-                            sessionAttributes: intentRequest.session.attributes,
+                            sessionAttributes: intentRequest.session,
                             title: `Book Engine supported genres`, output: content, repromptMessage, shouldEndSession: false
                         });
                     }
                     return callback({
-                        sessionAttributes: intentRequest.session.attributes,
-                        title: `All time popular ${bookGenre} books for this week`, output: content, repromptMessage, shouldEndSession: false
+                        sessionAttributes: intentRequest.session,
+                        title: `All time popular ${bookGenre} books for this week`, output: content, repromptMessage, shouldEndSession: true
                     });
                 })
                 .catch(err => errorHandle(callback, err));
