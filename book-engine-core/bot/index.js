@@ -92,7 +92,8 @@ BotFactory.dispatch = (intentRequest, callback) => {
     const bookGenre = intentRequest.currentIntent.slots['BookGenre'];
     if (intentName === 'BFIBookEngineGetAuthor') {
         return getAuthor({ bookTitle, authorName})
-            .then((content) => {
+            .then((response) => {
+                const { session, content } = response;
                 return callback(close(
                     intentRequest.sessionAttributes, 'Fulfilled', {
                         contentType: 'PlainText',
@@ -104,7 +105,8 @@ BotFactory.dispatch = (intentRequest, callback) => {
     }
     else if (intentName === 'BFIBookEngineGetBookDescription') {
         return getBookDescription({ bookTitle, authorName})
-            .then((content) => {
+            .then((response) => {
+                const { session, content } = response;
                 return callback(close(
                     intentRequest.sessionAttributes, 'Fulfilled', {
                         contentType: 'PlainText',
@@ -116,7 +118,8 @@ BotFactory.dispatch = (intentRequest, callback) => {
     }
     else if (intentName === 'BFIBookEngineGetBookInfo') {
         return getBookInfo({ bookTitle, authorName})
-            .then((content) => {
+            .then((response) => {
+                const { session, content } = response;
                 return callback(close(
                     intentRequest.sessionAttributes, 'Fulfilled', {
                         contentType: 'PlainText',
@@ -128,7 +131,8 @@ BotFactory.dispatch = (intentRequest, callback) => {
     }
     else if (intentName === 'BFIBookEngineGetSimiliarBooks') {
         return getSimilarBooks({ bookTitle, authorName})
-            .then((content) => {
+            .then((response) => {
+                const { session, content } = response;
                 return callback(close(
                     intentRequest.sessionAttributes, 'Fulfilled', {
                         contentType: 'PlainText',
@@ -146,20 +150,20 @@ BotFactory.dispatch = (intentRequest, callback) => {
             execFunc = getAllTimePopularBooks;
         }
         return execFunc({ bookGenre })
-                .then((content) => {
-                    const { response, confirmIntent } = content;
+                .then((response) => {
+                    const { content, confirmIntent } = response;
                     if (confirmIntent) {
                         return callback(confirm(
                             intentRequest.sessionAttributes, 'BFIBookEngineGetSupportedGenres', {}, {
                                 contentType: 'PlainText',
-                                content: response
+                                content
                             }
                         ));
                     }
                     return callback(close(
                         intentRequest.sessionAttributes, 'Fulfilled', {
                             contentType: 'PlainText',
-                            content: response
+                            content
                         }
                     ));
                 })
