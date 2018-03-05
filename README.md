@@ -5,7 +5,7 @@ This is an open source project under Paytm - Build for India initiative, which w
 This project can used for:
 * [Alexa Skill](https://www.amazon.com/Mukul-Jain-BFI-Book-Engine/dp/B079RCSD26/)
 * [Chatbot](https://www.facebook.com/BFIBookEngine/)
-* VR App
+* [VR App](https://www.youtube.com/watch?v=U6i5Jz3nrc0)
 
 ## Getting Started
 
@@ -62,7 +62,9 @@ Most popular horror books for all time
 
 #### VR App
 
-TBD
+[![Click here to see demo of Book Engine - VR version](http://i3.ytimg.com/vi/U6i5Jz3nrc0/maxresdefault.jpg)](https://www.youtube.com/watch?v=U6i5Jz3nrc0)
+
+More instruction coming soon for VR app.
 
 ## Prototype
 I have created a rough prototype for this project to demonstrate, how it will work. 
@@ -87,13 +89,13 @@ npm run lintfix // will automatically fix some of the issues
 
 * Deploy book-engine-core as lambda function using node-lammbda, aws-cli or any method of your preference. Follow deploy.env.sample to add necessary enviornment variables.
 
-### Alexa Skill
+#### Alexa Skill
 
 * Create alexa skill on developers.amazon.com portal and add basic detals and intent schema (connect with me to get intent schema). 
 * Pass the ARN id of previously created lambda function.
 * In test section, you can test your alexa skill.
 
-### Chatbot
+#### Chatbot
 
 * [This](https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start) will help you to create bot on facebook. For webhook, we will use lambda function created earlier.
 * Follow [this](https://docs.aws.amazon.com/lex/latest/dg/gs-bp-create-bot.html) guide to create your chatbot.
@@ -101,7 +103,7 @@ npm run lintfix // will automatically fix some of the issues
 * Build the bot from aws console and test it from there.
 * Publish it to test it on live facebook messenger.
 
-### VR App
+#### VR App
 
 TBD
 
