@@ -204,6 +204,7 @@ BotFactory.handleRequest = (event, callback) => {
             callback(null, response);
         });
     } catch (err) {
+        alexaLogger.logInfo(`Error ${err}`);
         callback(err);
     }
 };
